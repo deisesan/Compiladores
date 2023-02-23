@@ -8,8 +8,13 @@
   Link: https://docs.oracle.com/javase/specs/jls/se14/jls14.pdf
 */
 
-PARSER_BEGIN
-PARSER_END
+PARSER_BEGIN(AnaliseLexica)
+  public class AnaliseLexica {
+    public static void main ( String args [ ] ) {
+      System.out.println('ola mundo!');
+    }
+  } 
+PARSER_END(AnaliseLexica)
 
 // Keywords
 TOKEN: {
