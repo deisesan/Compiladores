@@ -9,64 +9,242 @@
 */
 
 PARSER_BEGIN(AnaliseLexica)
+  import java.io.*;
+
   public class AnaliseLexica {
-    public static void main ( String args [ ] ) {
-      System.out.println('ola mundo!');
+    public static void main ( String args [ ] ) throws ParseException, IOException {
+      AnaliseLexica analiselexica = new AnaliseLexica(new FileInputStream(args[0]));
+      analiselexica.AnaliseLexica();
     }
   } 
 PARSER_END(AnaliseLexica)
 
-// Keywords
-TOKEN: {
-  <UNDERSCORE: "_">
-| <ABSTRACT: "abstract">
-| <ASSERT: "assert">
-| <BOOLEAN: "boolean">
-| <BREAK: "break">
-| <BYTE: "byte">
-| <CASE: "case">
-| <CATCH: "catch">
-| <CHAR: "char">
-| <CLASS: "class">
-| <CONST: "const">
-| <CONTINUE: "continue">
-| <DEFAULT: "default">
-| <DO: "do">
-| <DOUBLE: "double">
-| <ELSE: "else">
-| <ENUM: "enum">
-| <EXTENDS: "extends">
-| <FINAL: "final">
-| <FINALLY: "finally">
-| <FLOAT: "float">
-| <FOR: "for">
-| <IF: "if">
-| <GOTO: "goto">
-| <IMPLEMENTS: "implements">
-| <IMPORT: "import">
-| <INSTANCEOF: "instanceof">
-| <INT: "int">
-| <INTERFACE: "interface">
-| <LONG: "long">
-| <NATIVE: "native">
-| <NEW: "new">
-| <PACKAGE: "package">
-| <PRIVATE: "private">
-| <PROTECTED: "protected">
-| <PUBLIC: "public">
-| <RETURN: "return">
-| <SHORT: "short">
-| <STATIC: "static">
-| <STRICTFP: "strictfp">
-| <SUPER: "super">
-| <SWITCH: "switch">
-| <SYNCHRONIZED: "synchronized">
-| <THIS: "this">
-| <THROW: "throw">
-| <THROWS: "throws">
-| <TRANSIENT: "transient">
-| <TRY: "try">
-| <VOID: "void">
-| <VOLATILE: "volatile">
-| <WHILE: "while">
+// SKIP WHEN FOUND
+SKIP : {
+	  " " 
+  | "\t" 
+  | "\r" 
+  | "\n" 
+  | "\r\n" 
 }
+
+// KEYWORDS
+TOKEN: {
+    <UNDERSCORE: "_">
+  | <ABSTRACT: "abstract">
+  | <ASSERT: "assert">
+  | <BOOLEAN: "boolean">
+  | <BREAK: "break">
+  | <BYTE: "byte">
+  | <CASE: "case">
+  | <CATCH: "catch">
+  | <CHAR: "char">
+  | <CLASS: "class">
+  | <CONST: "const">
+  | <CONTINUE: "continue">
+  | <DO: "do">
+  | <DOUBLE: "double">
+  | <ELSE: "else">
+  | <ENUM: "enum">
+  | <EXTENDS: "extends">
+  | <FINAL: "final">
+  | <FINALLY: "finally">
+  | <FLOAT: "float">
+  | <FOR: "for">
+  | <IF: "if">
+  | <GOTO: "goto">
+  | <IMPLEMENTS: "implements">
+  | <IMPORT: "import">
+  | <INSTANCEOF: "instanceof">
+  | <INT: "int">
+  | <INTERFACE: "interface">
+  | <LONG: "long">
+  | <NATIVE: "native">
+  | <NEW: "new">
+  | <PACKAGE: "package">
+  | <PRIVATE: "private">
+  | <PROTECTED: "protected">
+  | <PUBLIC: "public">
+  | <RETURN: "return">
+  | <SHORT: "short">
+  | <STATIC: "static">
+  | <STRICTFP: "strictfp">
+  | <SUPER: "super">
+  | <SWITCH: "switch">
+  | <SYNCHRONIZED: "synchronized">
+  | <THIS: "this">
+  | <THROW: "throw">
+  | <THROWS: "throws">
+  | <TRANSIENT: "transient">
+  | <TRY: "try">
+  | <VOID: "void">
+  | <VOLATILE: "volatile">
+  | <WHILE: "while">
+}
+
+// SEPARATORS
+TOKEN: {
+    <SEPARATOR1:  "(">
+  | <SEPARATOR2:  ")">
+  | <SEPARATOR3:  "{">
+  | <SEPARATOR4:  "}">
+  | <SEPARATOR5:  "[">
+  | <SEPARATOR6:  "]">
+  | <SEPARATOR7:  ";">
+  | <SEPARATOR8:  ",">
+  | <SEPARATOR9:  ".">
+  | <SEPARATOR10: "...">
+  | <SEPARATOR11: "@">
+  | <SEPARATOR12: "::">
+}
+
+// OPERATORS
+TOKEN: {
+    <OPERATOR1:  "=">
+  |	<OPERATOR2:  ">">
+  |	<OPERATOR3:  "<">
+  |	<OPERATOR4:  "!">
+  |	<OPERATOR5:  "~">
+  |	<OPERATOR6:  "?">
+  |	<OPERATOR7:  ":">
+  |	<OPERATOR8:  "->">
+  |	<OPERATOR9:  "==">
+  |	<OPERATOR10: ">=">
+  |	<OPERATOR11: "<=">
+  |	<OPERATOR12: "!=">
+  |	<OPERATOR13: "&&">
+  |	<OPERATOR14: "||">
+  |	<OPERATOR15: "++">
+  |	<OPERATOR16: "--">
+  |	<OPERATOR17: "+">
+  |	<OPERATOR18: "-">
+  |	<OPERATOR19: "*">
+  |	<OPERATOR20: "/">
+  |	<OPERATOR21: "&">
+  |	<OPERATOR22: "|">
+  |	<OPERATOR23: "^">
+  |	<OPERATOR24: "%">
+  |	<OPERATOR25: "<<">
+  |	<OPERATOR26: ">>">
+  |	<OPERATOR27: ">>>">
+  |	<OPERATOR28: "+=">
+  |	<OPERATOR29: "-=">
+  |	<OPERATOR30: "*=">
+  |	<OPERATOR31: "/=">
+  |	<OPERATOR32: "&=">
+  |	<OPERATOR33: "|=">
+  |	<OPERATOR34: "^=">
+  |	<OPERATOR35: "%=">
+  |	<OPERATOR36: "<<=">
+  |	<OPERATOR37: ">>=">
+  |	<OPERATOR38: ">>>=">
+}
+
+void AnaliseLexica() :
+  {Token token;}
+  {
+  (
+    token = <UNDERSCORE>    { System.out.println("UNDERSCORE "   + token.image); } 
+  | token = <ABSTRACT>      { System.out.println("ABSTRACT "     + token.image); }
+  | token = <ASSERT>        { System.out.println("ASSERT "       + token.image); }
+  | token = <BOOLEAN>       { System.out.println("BOOLEAN "      + token.image); }
+  | token = <BREAK>         { System.out.println("BREAK "        + token.image); }
+  | token = <BYTE>          { System.out.println("BYTE "         + token.image); }
+  | token = <CASE>          { System.out.println("CASE "         + token.image); }
+  | token = <CATCH>         { System.out.println("CATCH "        + token.image); }
+  | token = <CHAR>          { System.out.println("CHAR "         + token.image); }
+  | token = <CLASS>         { System.out.println("CLASS "        + token.image); }
+  | token = <CONST>         { System.out.println("CONST "        + token.image); }
+  | token = <CONTINUE>      { System.out.println("CONTINUE "     + token.image); }
+  | token = <DO>            { System.out.println("DO "           + token.image); }
+  | token = <DOUBLE>        { System.out.println("DOUBLE "       + token.image); }
+  | token = <ELSE>          { System.out.println("ELSE "         + token.image); }
+  | token = <ENUM>          { System.out.println("ENUM "         + token.image); }
+  | token = <EXTENDS>       { System.out.println("EXTENDS "      + token.image); }
+  | token = <FINAL>         { System.out.println("FINAL "        + token.image); }
+  | token = <FINALLY>       { System.out.println("FINALLY "      + token.image); }
+  | token = <FLOAT>         { System.out.println("FLOAT "        + token.image); }
+  | token = <FOR>           { System.out.println("FOR "          + token.image); }
+  | token = <IF>            { System.out.println("IF "           + token.image); }
+  | token = <GOTO>          { System.out.println("GOTO "         + token.image); }
+  | token = <IMPLEMENTS>    { System.out.println("IMPLEMENTS "   + token.image); }
+  | token = <IMPORT>        { System.out.println("IMPORT "       + token.image); }
+  | token = <INSTANCEOF>    { System.out.println("INSTANCEOF "   + token.image); }
+  | token = <INT>           { System.out.println("INT "          + token.image); }
+  | token = <INTERFACE>     { System.out.println("INTERFACE "    + token.image); }
+  | token = <LONG>          { System.out.println("LONG "         + token.image); }
+  | token = <NATIVE>        { System.out.println("NATIVE "       + token.image); }
+  | token = <NEW>           { System.out.println("NEW "          + token.image); }
+  | token = <PACKAGE>       { System.out.println("PACKAGE "      + token.image); }
+  | token = <PRIVATE>       { System.out.println("PRIVATE "      + token.image); }
+  | token = <PROTECTED>     { System.out.println("PROTECTED "    + token.image); }
+  | token = <PUBLIC>        { System.out.println("PUBLIC "       + token.image); }
+  | token = <RETURN>        { System.out.println("RETURN "       + token.image); }
+  | token = <SHORT>         { System.out.println("SHORT "        + token.image); }
+  | token = <STATIC>        { System.out.println("STATIC "       + token.image); }
+  | token = <STRICTFP>      { System.out.println("STRICTFP "     + token.image); }
+  | token = <SUPER>         { System.out.println("SUPER "        + token.image); }
+  | token = <SWITCH>        { System.out.println("SWITCH "       + token.image); }
+  | token = <SYNCHRONIZED>  { System.out.println("SYNCHRONIZED " + token.image); }
+  | token = <THIS>          { System.out.println("THIS "         + token.image); }
+  | token = <THROW>         { System.out.println("THROW "        + token.image); }
+  | token = <THROWS>        { System.out.println("THROWS "       + token.image); }
+  | token = <TRANSIENT>     { System.out.println("TRANSIENT "    + token.image); }
+  | token = <TRY>           { System.out.println("TRY "          + token.image); }
+  | token = <VOID>          { System.out.println("VOID "         + token.image); }
+  | token = <VOLATILE>      { System.out.println("VOLATILE "     + token.image); }
+  | token = <WHILE>         { System.out.println("WHILE "        + token.image); }
+  | token = <SEPARATOR1>    { System.out.println("SEPARATOR1 "   + token.image); }
+  | token = <SEPARATOR2>    { System.out.println("SEPARATOR2 "   + token.image); }
+  | token = <SEPARATOR3>    { System.out.println("SEPARATOR3 "   + token.image); }
+  | token = <SEPARATOR4>    { System.out.println("SEPARATOR4 "   + token.image); }
+  | token = <SEPARATOR5>    { System.out.println("SEPARATOR5 "   + token.image); }
+  | token = <SEPARATOR6>    { System.out.println("SEPARATOR6 "   + token.image); }
+  | token = <SEPARATOR7>    { System.out.println("SEPARATOR7 "   + token.image); }
+  | token = <SEPARATOR8>    { System.out.println("SEPARATOR8 "   + token.image); }
+  | token = <SEPARATOR9>    { System.out.println("SEPARATOR9 "   + token.image); }
+  | token = <SEPARATOR10>   { System.out.println("SEPARATOR10 "  + token.image); }
+  | token = <SEPARATOR11>   { System.out.println("SEPARATOR11 "  + token.image); }
+  | token = <SEPARATOR12>   { System.out.println("SEPARATOR12 "  + token.image); }
+  | token = <OPERATOR1>     { System.out.println("OPERATOR1 "    + token.image); }
+  | token = <OPERATOR2>     { System.out.println("OPERATOR2 "    + token.image); }
+  | token = <OPERATOR3>     { System.out.println("OPERATOR3 "    + token.image); }
+  | token = <OPERATOR4>     { System.out.println("OPERATOR4 "    + token.image); }
+  | token = <OPERATOR5>     { System.out.println("OPERATOR5 "    + token.image); }
+  | token = <OPERATOR6>     { System.out.println("OPERATOR6 "    + token.image); }
+  | token = <OPERATOR7>     { System.out.println("OPERATOR7 "    + token.image); }
+  | token = <OPERATOR8>     { System.out.println("OPERATOR8 "    + token.image); }
+  | token = <OPERATOR9>     { System.out.println("OPERATOR9 "    + token.image); }
+  | token = <OPERATOR10>    { System.out.println("OPERATOR10 "   + token.image); }
+  | token = <OPERATOR11>    { System.out.println("OPERATOR11 "   + token.image); }
+  | token = <OPERATOR12>    { System.out.println("OPERATOR12 "   + token.image); }
+  | token = <OPERATOR13>    { System.out.println("OPERATOR13 "   + token.image); }
+  | token = <OPERATOR14>    { System.out.println("OPERATOR14 "   + token.image); }
+  | token = <OPERATOR15>    { System.out.println("OPERATOR15 "   + token.image); }
+  | token = <OPERATOR16>    { System.out.println("OPERATOR16 "   + token.image); }
+  | token = <OPERATOR17>    { System.out.println("OPERATOR17 "   + token.image); }
+  | token = <OPERATOR18>    { System.out.println("OPERATOR18 "   + token.image); }  
+  | token = <OPERATOR19>    { System.out.println("OPERATOR19 "   + token.image); }
+  | token = <OPERATOR20>    { System.out.println("OPERATOR20 "   + token.image); }
+  | token = <OPERATOR21>    { System.out.println("OPERATOR21 "   + token.image); }
+  | token = <OPERATOR22>    { System.out.println("OPERATOR22 "   + token.image); }
+  | token = <OPERATOR23>    { System.out.println("OPERATOR23 "   + token.image); }  
+  | token = <OPERATOR24>    { System.out.println("OPERATOR24 "   + token.image); }
+  | token = <OPERATOR25>    { System.out.println("OPERATOR25 "   + token.image); }
+  | token = <OPERATOR26>    { System.out.println("OPERATOR26 "   + token.image); }
+  | token = <OPERATOR27>    { System.out.println("OPERATOR27 "   + token.image); }
+  | token = <OPERATOR28>    { System.out.println("OPERATOR28 "   + token.image); }
+  | token = <OPERATOR29>    { System.out.println("OPERATOR29 "   + token.image); }
+  | token = <OPERATOR30>    { System.out.println("OPERATOR30 "   + token.image); }
+  | token = <OPERATOR31>    { System.out.println("OPERATOR31 "   + token.image); }
+  | token = <OPERATOR32>    { System.out.println("OPERATOR32 "   + token.image); }
+  | token = <OPERATOR33>    { System.out.println("OPERATOR33 "   + token.image); }
+  | token = <OPERATOR34>    { System.out.println("OPERATOR34 "   + token.image); }
+  | token = <OPERATOR35>    { System.out.println("OPERATOR35 "   + token.image); }
+  | token = <OPERATOR36>    { System.out.println("OPERATOR36 "   + token.image); }
+  | token = <OPERATOR37>    { System.out.println("OPERATOR37 "   + token.image); }
+  | token = <OPERATOR38>    { System.out.println("OPERATOR38 "   + token.image); }
+  )*
+
+  <EOF>
+} 
