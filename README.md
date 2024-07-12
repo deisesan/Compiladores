@@ -3,3 +3,6 @@ Este é um projeto desenvolvido como parte da disciplina de Compiladores na facu
 
 ## Laboratórios
 - [Laboratório 01](https://github.com/deisesan/Desenvolvimento.net/blob/main/Exerc%C3%ADcios/Exerc%C3%ADcio1.md)
+
+## Links
+- [Documentação - FreePascal](https://www.freepascal.org/docs-html/ref/refch1.html#x8-70001)
