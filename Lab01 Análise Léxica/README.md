@@ -1,4 +1,4 @@
-## Enunciado Laboratório 01 de Compiladores.
+## Enunciado - Laboratório 01
 
 Escreva um programa de computador que faça análise léxica do texto de um programa de computador na linguagem sorteada para você. Nesta análise não é necessário tratar modo XML (Scala), nem validade de caractere Unicode (Go). 
 
