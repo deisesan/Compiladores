@@ -1,11 +1,11 @@
-PARSER_BEGIN(AnaliseLexica)
-	public class AnaliseLexica {
+PARSER_BEGIN(Parser)
+	public class Parser {
 	  public static void main(String args[]) throws ParseException {
-	    AnaliseLexica parser = new AnaliseLexica(System.in);
+	    Parser parser = new Parser(System.in);
 	    parser.Input();
 	  }
 	}
-PARSER_END(AnaliseLexica)
+PARSER_END(Parser)
 
 void Input() :
 {}

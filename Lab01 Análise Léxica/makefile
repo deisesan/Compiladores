@@ -1,12 +1,10 @@
 all:
-	del *.java
-	del *.class
-	javacc lab01.jj
+	javacc Parser.jj
 	javac *.java
-	cls
-	java AnaliseLexica entrada.in
-	del *.java
-	del *.class
+	clear
+	java Parser entrada.in
+	rm *.java
+	rm *.class
 clean:
-	del *.java
-	del *.class
+	rm *.java
+	rm *.class
