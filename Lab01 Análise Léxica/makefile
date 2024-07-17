@@ -1,8 +1,10 @@
 all:
+	rm *.java
+	rm *.class
 	javacc Parser.jj
 	javac *.java
 	clear
-	java Parser entrada.in
+	java Parser entrada.pas
 	rm *.java
 	rm *.class
 clean:
