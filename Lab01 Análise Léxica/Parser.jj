@@ -20,42 +20,41 @@ import java.util.Map;
 public class Parser {
   public static void main(String args[]) {
 
-  	if(args.length == 0){
-  		System.err.println("Erro ao abrir o arquivo de entrada");
-      System.exit(1);
-    }
+	if(args.length == 0){
+		System.err.println("Erro ao abrir o arquivo de entrada");
+		System.exit(1);
+	}
 
-    try {
-    	Parser parser = new Parser(new FileInputStream(args[0]));
-
-    	Map<Integer, String> constantes = new HashMap<>();
-			Class<?> classParser = ParserConstants.class;
-			java.lang.reflect.Field[] fields = classParser.getFields();
-
-		  for (java.lang.reflect.Field field : fields) {
-				if (field.getType() == int.class) {
-				    int modificadores = field.getModifiers();
-				    if (java.lang.reflect.Modifier.isPublic(modificadores) &&
-				        java.lang.reflect.Modifier.isStatic(modificadores) &&
-				        java.lang.reflect.Modifier.isFinal(modificadores)) {
-				        try {
-				            constantes.put(field.getInt(null), field.getName());
-				        } catch (Exception error) {
-				            error.printStackTrace();
-				        }
-				    }
+	    try {
+		Parser parser = new Parser(new FileInputStream(args[0]));
+		
+		Map<Integer, String> constantes = new HashMap<>();
+		Class<?> classParser = ParserConstants.class;
+		java.lang.reflect.Field[] fields = classParser.getFields();
+		
+		for (java.lang.reflect.Field field : fields) {
+			if (field.getType() == int.class) {
+				int modificadores = field.getModifiers();
+				if (java.lang.reflect.Modifier.isPublic(modificadores) && java.lang.reflect.Modifier.isStatic(modificadores) && java.lang.reflect.Modifier.isFinal(modificadores)) {
+					try {
+						constantes.put(field.getInt(null), field.getName());
+					} catch (Exception error) {
+					error.printStackTrace();
+					}
 				}
 			}
-
-			Token token;
-	    do {
-	        token = getNextToken();
-	        System.out.println(constantes.get(token.kind) + " " + token.image);
-	    } while (token.kind != ParserConstants.EOF);
-
-    } catch (IOException error) {
-    	error.printStackTrace();
-    }
+		}
+		
+		Token token;
+		    
+		do {
+			token = getNextToken();
+			System.out.println(constantes.get(token.kind) + " " + token.image);
+		} while (token.kind != ParserConstants.EOF);
+		
+		} catch (IOException error) {
+		error.printStackTrace();
+		}
 	}
 }
 PARSER_END(Parser)
