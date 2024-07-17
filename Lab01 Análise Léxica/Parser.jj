@@ -52,7 +52,7 @@ public class Parser {
 				System.out.println(constantes.get(token.kind) + " " + token.image);
 			} while (token.kind != ParserConstants.EOF);
 		} catch (IOException error) {
-		error.printStackTrace();
+			error.printStackTrace();
 		}
 	}
 }
