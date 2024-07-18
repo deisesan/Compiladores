@@ -1,6 +1,4 @@
 all:
-	rm *.java
-	rm *.class
 	javacc Parser.jj
 	javac *.java
 	clear

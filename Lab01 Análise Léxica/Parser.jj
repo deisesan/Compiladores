@@ -58,6 +58,73 @@ public class Parser {
 }
 PARSER_END(Parser)
 
+/* Characters - Skip */
+
+SKIP: {
+	" " | "\t" | "\n" | "\r" | "\r\n"
+}
+
+/* Comments - Skip */
+
+SKIP: {
+	<LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
+| <DELIMITER_START: "(*" (~["*"])* "*)">
+| <BRACE_START: "{" (~["}"])* "}">
+}
+
+/* Symbols */
+
+TOKEN : {
+  <LETTER: ["a"-"z", "A"-"Z", "_"]>
+| <DIGIT: ["0"-"9"]>
+| <HEX_DIGIT: ["0"-"9", "A"-"Z", "a"-"z"]>
+}
+
+/* Symbols - Specials Characters */
+
+TOKEN : {
+  <#AMPERSAND: "&"> 
+| <SINGLE_QUOTE: "'">
+| <PLUS: "+">
+|	<MINUS: "-">
+| <MULTIPLY: "*">
+| <DIVIDE: "/">
+| <EQUAL: "=">
+| <LESS_THAN: "<">
+| <GREATER_THAN: ">">
+| <LEFT_BRACKET: "[">
+| <RIGHT_BRACKET: "]">
+| <DOT: ".">
+| <COMMA: ",">
+| <LEFT_PAREN: "(">
+| <RIGHT_PAREN: ")">
+| <COLON: ":">
+| <CARET: "^">   
+| <AT: "@">
+| <LEFT_BRACE: "{">
+| <RIGHT_BRACE: "}">
+| <DOLLAR: "$">
+| <HASH: "#">
+| <AND: "&"> 
+| <PERCENT: "%">
+| <DOUBLE_LESS_THAN: "<<">
+| <DOUBLE_GREATER_THAN: ">>">
+| <DOUBLE_ASTERISK: "**">
+| <ANGLE_BRACKETS: "<>">
+| <ANGLE_BRACKETS_REVERSED: "><">
+| <LESS_THAN_EQUAL: "<=">
+| <GREATER_THAN_EQUAL: ">=">
+| <ASSIGN: ":=">
+| <PLUS_ASSIGN: "+=">
+| <MINUS_ASSIGN: "-=">
+| <MULTIPLY_ASSIGN: "*=">
+| <DIVIDE_ASSIGN: "/=">
+| <COMMENT: "(*">
+| <DOT_DOT: "..">
+| <DOT_DOT_PAREN: "(. .)">
+| <COMMENT_LINE: "//">
+}
+
 /* Reserved Words - Turbo Pascal */
 
 TOKEN: {
@@ -201,3 +268,49 @@ TOKEN: {
 }
 
 /* Identifiers */
+
+TOKEN: {
+  <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)*> 
+}
+
+/* Hint Directives */
+
+TOKEN : {
+	<DEPRECATED: "deprecated">
+| <EXPERIMENTAL: "experimental">
+| <PLATFORM: "platform">
+| <UNIMPLEMENTED: "unimplemented">
+}
+
+/* Numbers */
+
+TOKEN : {
+	<HEX_DIGIT_SEQUENCE: (<"+" | "-">)? "$" (["0"-"9"] | ["A"-"F"] | ["a"-"f"])+>
+| <OCTAL_DIGIT_SEQUENCE: (<"+" | "-">)? "&" (["0"-"7"])+ >
+| <BIN_DIGIT_SEQUENCE: (<"+" | "-">)? "%" (["0","1"])+ >
+| <DIGIT_SEQUENCE: ["0"-"9"] (["0"-"9"])* >
+| <UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+| <SIGN: "+" | "-">
+| <UNSIGNED_REAL: (<"+" | "-">)? (["0"-"9"] (["0"-"9"])*)+ "." (["0"-"9"] (["0"-"9"])*)* (("E" | "e") (<"+" | "-">)? (["0"-"9"])+)? >
+| <SCALE_FACTOR: ("E" | "e") (<"+" | "-">)? (["0"-"9"])+ >
+| <UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL> >
+| <SIGNED_NUMBER:  (<"+" | "-">)? <UNSIGNED_NUMBER>>
+}
+
+/* Labels */
+
+TOKEN: {
+  <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
+}
+
+/* Character Strings */
+
+TOKEN: {
+	<CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
+| <QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
+| <STRING_CHARACTER: [" " - "&", "(" - "~"]>
+| <CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+}
+
+
+
