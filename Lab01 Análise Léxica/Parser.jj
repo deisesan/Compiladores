@@ -67,24 +67,27 @@ SKIP: {
 /* Comments - Skip */
 
 SKIP: {
-	<LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
-| <DELIMITER_START: "(*" (~["*"])* "*)">
-| <BRACE_START: "{" (~["}"])* "}">
+	<COMMENT_LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
+| <COMMENT_DELIMITER: "(*" (~["*"])* "*)">
+| <COMMENT_BRACE: "{" (~["}"])* "}">
 }
 
 /* Symbols */
 
 TOKEN : {
-  <LETTER: ["a"-"z", "A"-"Z", "_"]>
-| <DIGIT: ["0"-"9"]>
+  <#LETTER: ["a"-"z", "A"-"Z"]>
+| <#DIGIT: ["0"-"9"]>
 | <HEX_DIGIT: ["0"-"9", "A"-"Z", "a"-"z"]>
+| <#OCTAL_DIGIT: ["0"-"7"]>
+| <#BIN_DIGIT: ["0"-"1"]>
+| <UNDERSCORE: "_">
+| <#EXP: "E" | "e">
 }
 
 /* Symbols - Specials Characters */
 
 TOKEN : {
-  <#AMPERSAND: "&"> 
-| <SINGLE_QUOTE: "'">
+  <SINGLE_QUOTE: "'">
 | <PLUS: "+">
 |	<MINUS: "-">
 | <MULTIPLY: "*">
@@ -105,7 +108,7 @@ TOKEN : {
 | <RIGHT_BRACE: "}">
 | <DOLLAR: "$">
 | <HASH: "#">
-| <AND: "&"> 
+| <AND_SYMBOL: "&"> 
 | <PERCENT: "%">
 | <DOUBLE_LESS_THAN: "<<">
 | <DOUBLE_GREATER_THAN: ">>">
@@ -119,10 +122,8 @@ TOKEN : {
 | <MINUS_ASSIGN: "-=">
 | <MULTIPLY_ASSIGN: "*=">
 | <DIVIDE_ASSIGN: "/=">
-| <COMMENT: "(*">
-| <DOT_DOT: "..">
-| <DOT_DOT_PAREN: "(. .)">
-| <COMMENT_LINE: "//">
+| <LEFT_PAREN_DOT: "(.">
+| <DOT_RIGHT_PAREN: ".)">
 }
 
 /* Reserved Words - Turbo Pascal */
@@ -270,47 +271,29 @@ TOKEN: {
 /* Identifiers */
 
 TOKEN: {
-  <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)*> 
-}
-
-/* Hint Directives */
-
-TOKEN : {
-	<DEPRECATED: "deprecated">
-| <EXPERIMENTAL: "experimental">
-| <PLATFORM: "platform">
-| <UNIMPLEMENTED: "unimplemented">
+  <#IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)*> 
 }
 
 /* Numbers */
 
 TOKEN : {
-	<HEX_DIGIT_SEQUENCE: (<"+" | "-">)? "$" (["0"-"9"] | ["A"-"F"] | ["a"-"f"])+>
-| <OCTAL_DIGIT_SEQUENCE: (<"+" | "-">)? "&" (["0"-"7"])+ >
-| <BIN_DIGIT_SEQUENCE: (<"+" | "-">)? "%" (["0","1"])+ >
-| <DIGIT_SEQUENCE: ["0"-"9"] (["0"-"9"])* >
-| <UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
-| <SIGN: "+" | "-">
-| <UNSIGNED_REAL: (<"+" | "-">)? (["0"-"9"] (["0"-"9"])*)+ "." (["0"-"9"] (["0"-"9"])*)* (("E" | "e") (<"+" | "-">)? (["0"-"9"])+)? >
-| <SCALE_FACTOR: ("E" | "e") (<"+" | "-">)? (["0"-"9"])+ >
-| <UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL> >
-| <SIGNED_NUMBER:  (<"+" | "-">)? <UNSIGNED_NUMBER>>
-}
-
-/* Labels */
-
-TOKEN: {
-  <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
+  <#HEX_DIGIT_SEQUENCE: (<SIGNAL>)? <DOLLAR> (<HEX_DIGIT>)+>
+| <#OCTAL_DIGIT_SEQUENCE: (<SIGNAL>)? <AND_SYMBOL> (<OCTAL_DIGIT>)+ >
+| <#BIN_DIGIT_SEQUENCE: (<SIGNAL>)? "%" (<BIN_DIGIT>)+ >
+| <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
+| <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+| <#SIGNAL: "+" | "-">
+| <#UNSIGNED_REAL: (<SIGNAL>)? (<DIGIT> (<DIGIT>)*)+ "." (<DIGIT> (<DIGIT>)*)* (<EXP> (<SIGNAL>)? (<DIGIT>)+)? >
+| <SCALE_FACTOR: <EXP> (<SIGNAL>)? (<DIGIT>)+ >
+| <#UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL> >
+| <SIGNED_NUMBER:  (<SIGNAL>)? <UNSIGNED_NUMBER>>
 }
 
 /* Character Strings */
 
 TOKEN: {
 	<CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
-| <QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
-| <STRING_CHARACTER: [" " - "&", "(" - "~"]>
-| <CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+| <#QUOTED_STRING: "'" ([" " - <AND_SYMBOL>, "(" - "~"])* "'">
+| <STRING_CHARACTER: [" " - <AND_SYMBOL>, "(" - "~"]>
+| <#CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
 }
-
-
-

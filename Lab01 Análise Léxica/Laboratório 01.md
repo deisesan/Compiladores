@@ -16,3 +16,20 @@ Comentário da Documentação:
 "When used in a range specifier, the character pair (. is equivalent to the left square bracket [. Likewise, the character pair .) is equivalent to the right square bracket ]. When used for comment delimiters, the character pair (* is equivalent to the left brace { and the character pair *) is equivalent to the right brace }. These character pairs retain their normal meaning in string expressions."
 
 AND e AMPERSAND-> "&"
+
+/* Hint Directives */
+
+TOKEN : {
+  <DEPRECATED: "deprecated">
+| <EXPERIMENTAL: "experimental">
+| <PLATFORM: "platform">
+| <UNIMPLEMENTED: "unimplemented">
+}
+
+/* Labels */
+
+TOKEN: {
+  <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
+}
+
+/* Não entra agora na Análise Léxica */
