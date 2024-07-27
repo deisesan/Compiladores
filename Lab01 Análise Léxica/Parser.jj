@@ -293,7 +293,7 @@ TOKEN : {
 
 TOKEN: {
 	<CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
-| <#QUOTED_STRING: "'" ([" " - <AND_SYMBOL>, "(" - "~"])* "'">
-| <STRING_CHARACTER: [" " - <AND_SYMBOL>, "(" - "~"]>
+| <#QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
+| <STRING_CHARACTER: [" " - "&", "(" - "~"]>
 | <#CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
 }
