@@ -1,4 +1,4 @@
-# Variáveis para detecção do sistema operacional
+# Detecção do SO
 ifeq ($(OS),Windows_NT)
 	RM = del /Q
 	CLEAR = cls
@@ -7,18 +7,19 @@ else
 	CLEAR = clear
 endif
 
-# Alvo padrão
+# Comando All
 all: compile run
 
-# Compilar e executar
+# Comando Compile
 compile:
 	javacc Parser.jj
 	javac *.java
 
+# Comando Run
 run:
 	java Parser entrada.pas
 
-# Limpar arquivos temporários
+# Comando Clean
 clean:
 	$(RM) *.java *.class
 	$(CLEAR)

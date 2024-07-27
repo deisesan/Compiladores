@@ -77,7 +77,7 @@ SKIP: {
 TOKEN : {
   <#LETTER: ["a"-"z", "A"-"Z"]>
 | <#DIGIT: ["0"-"9"]>
-| <HEX_DIGIT: ["0"-"9", "A"-"F", "a"-"f"]> 
+| <#HEX_DIGIT: ["0"-"9", "A"-"F", "a"-"f"]> 
 | <#OCTAL_DIGIT: ["0"-"7"]>
 | <#BIN_DIGIT: ["0"-"1"]>
 | <UNDERSCORE: "_">
