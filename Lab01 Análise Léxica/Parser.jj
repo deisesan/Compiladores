@@ -22,43 +22,43 @@ import java.lang.reflect.Modifier;
 public class Parser {
   public static void main(String args[]) {
 
-		if(args.length == 0){
-			System.err.println("Erro ao abrir o arquivo de entrada");
-			System.exit(1);
-		}
-
-		try {
-			Parser parser = new Parser(new FileInputStream(args[0]));
-			
-			Map<Integer, String> constants = new HashMap<>();
-			Class<?> classParser = ParserConstants.class;
-			Field[] fields = classParser.getFields();
-			
-			for (Field field : fields) {
-				if (field.getType() == int.class) {
-					int modifiers = field.getModifiers();
-					boolean condition = Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
-
-					if (condition) {
-						try {
-							constants.put(field.getInt(null), field.getName());
-						} catch (Exception error) {
-							error.printStackTrace();
-						}
+	if(args.length == 0){
+		System.err.println("Erro ao abrir o arquivo de entrada");
+		System.exit(1);
+	}
+	
+	try {
+		Parser parser = new Parser(new FileInputStream(args[0]));
+		
+		Map<Integer, String> constants = new HashMap<>();
+		Class<?> classParser = ParserConstants.class;
+		Field[] fields = classParser.getFields();
+		
+		for (Field field : fields) {
+			if (field.getType() == int.class) {
+				int modifiers = field.getModifiers();
+				boolean condition = Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+				
+				if (condition) {
+					try {
+						constants.put(field.getInt(null), field.getName());
+					} catch (Exception error) {
+						error.printStackTrace();
 					}
 				}
 			}
-			
-			Token token;
-				
-			do {
-				token = getNextToken();
-				System.out.println(constants.get(token.kind) + " " + token.image);
-			} while (token.kind != ParserConstants.EOF);
-		} catch (IOException error) {
-			error.printStackTrace();
 		}
+		
+		Token token;
+	
+		do {
+			token = getNextToken();
+			System.out.println(constants.get(token.kind) + " " + token.image);
+		} while (token.kind != ParserConstants.EOF);
+	} catch (IOException error) {
+	error.printStackTrace();
 	}
+  }
 }
 PARSER_END(Parser)
 
@@ -71,7 +71,7 @@ SKIP: {
 /* Comments - Skip */
 
 SKIP: {
-	<COMMENT_LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
+  <COMMENT_LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
 | <COMMENT_DELIMITER: "(*" (~["*"])* "*)">
 | <COMMENT_BRACE: "{" (~["}"])* "}">
 }
@@ -93,7 +93,7 @@ TOKEN : {
 TOKEN : {
   <SINGLE_QUOTE: "'">
 | <PLUS: "+">
-|	<MINUS: "-">
+| <MINUS: "-">
 | <MULTIPLY: "*">
 | <DIVIDE: "/">
 | <EQUAL: "=">
@@ -133,10 +133,10 @@ TOKEN : {
 /* Reserved Words - Turbo Pascal */
 
 TOKEN: {
-	<ABSOLUTE: "absolute">
-|	<AND: "and">
-|	<ARRAY: "array">
-|	<ASM: "asm">
+  <ABSOLUTE: "absolute">
+| <AND: "and">
+| <ARRAY: "array">
+| <ASM: "asm">
 | <BEGIN: "begin">
 | <CASE: "case">
 | <CONST: "const">
@@ -189,7 +189,7 @@ TOKEN: {
 /* Reserved Words - Object Pascal */
 
 TOKEN: {
-	<AS: "as">
+  <AS: "as">
 | <CLASS: "class">
 | <DISPINTERFACE: "dispinterface">
 | <EXCEPT: "except">
@@ -275,7 +275,7 @@ TOKEN: {
 /* Identifiers */
 
 TOKEN: {
-    <#IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
+  <#IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
 }
 
 /* Numbers */
@@ -296,7 +296,7 @@ TOKEN : {
 /* Character Strings */
 
 TOKEN: {
-	<CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
+  <CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
 | <#QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
 | <STRING_CHARACTER: [" " - "&", "(" - "~"]>
 | <#CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
