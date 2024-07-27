@@ -1,10 +1,24 @@
-all:
+# Variáveis para detecção do sistema operacional
+ifeq ($(OS),Windows_NT)
+	RM = del /Q
+	CLEAR = cls
+else
+	RM = rm -f
+	CLEAR = clear
+endif
+
+# Alvo padrão
+all: compile run
+
+# Compilar e executar
+compile:
 	javacc Parser.jj
 	javac *.java
-	clear
+
+run:
 	java Parser entrada.pas
-	rm *.java
-	rm *.class
+
+# Limpar arquivos temporários
 clean:
-	rm *.java
-	rm *.class
+	$(RM) *.java *.class
+	$(CLEAR)
