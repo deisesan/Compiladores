@@ -79,12 +79,11 @@ SKIP: {
 /* Symbols */
 
 TOKEN : {
-  <#LETTER: ["a"-"z", "A"-"Z"]>
+  <#LETTER: ["a"-"z", "A"-"Z", "_"]>
 | <#DIGIT: ["0"-"9"]>
 | <#HEX_DIGIT: ["0"-"9", "A"-"F", "a"-"f"]> 
 | <#OCTAL_DIGIT: ["0"-"7"]>
 | <#BIN_DIGIT: ["0"-"1"]>
-| <UNDERSCORE: "_">
 | <#EXP: "E" | "e">
 }
 
@@ -106,6 +105,7 @@ TOKEN : {
 | <LEFT_PAREN: "(">
 | <RIGHT_PAREN: ")">
 | <COLON: ":">
+| <SEMICOLON: ";">
 | <CARET: "^">   
 | <AT: "@">
 | <LEFT_BRACE: "{">
@@ -275,7 +275,7 @@ TOKEN: {
 /* Identifiers */
 
 TOKEN: {
-  <#IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
+  <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
 }
 
 /* Numbers */
@@ -298,6 +298,5 @@ TOKEN : {
 TOKEN: {
   <CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
 | <#QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
-| <STRING_CHARACTER: [" " - "&", "(" - "~"]>
 | <#CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
 }
