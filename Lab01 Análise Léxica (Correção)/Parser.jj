@@ -1,0 +1,303 @@
+/* 
+  Laboratório 01
+  Matéria: Compiladores
+  Aluna: Deise Santana 
+  Professor: Alberto Alexandre Assis Miranda
+  Linguagem: FreePascal
+  Documentação: Pascal Tokens
+  Link: https://www.freepascal.org/docs-html/ref/refch1.html#x8-70001
+*/
+
+options{
+    IGNORE_CASE = true;
+}
+
+PARSER_BEGIN(Parser)
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+public class Parser {
+  public static void main(String args[]) {
+
+	if(args.length == 0){
+		System.err.println("Erro ao abrir o arquivo de entrada");
+		System.exit(1);
+	}
+	
+	try {
+		Parser parser = new Parser(new FileInputStream(args[0]));
+		
+		Map<Integer, String> constants = new HashMap<>();
+		Class<?> classParser = ParserConstants.class;
+		Field[] fields = classParser.getFields();
+		
+		for (Field field : fields) {
+			if (field.getType() == int.class) {
+				int modifiers = field.getModifiers();
+				boolean condition = Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+				
+				if (condition) {
+					try {
+						constants.put(field.getInt(null), field.getName());
+					} catch (Exception error) {
+						error.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		Token token;
+	
+		do {
+			token = getNextToken();
+			System.out.println(constants.get(token.kind) + " " + token.image);
+		} while (token.kind != ParserConstants.EOF);
+	} catch (IOException error) {
+	error.printStackTrace();
+	}
+  }
+}
+PARSER_END(Parser)
+
+/* Characters - Skip */
+
+SKIP: {
+	" " | "\t" | "\n" | "\r" | "\r\n"
+}
+
+/* Comments - Skip */
+
+SKIP: {
+  <COMMENT_LINE: "//" (~["\n", "\r"])* ("\n" | "\r\n" | "\r")?>
+| <COMMENT_DELIMITER: "(*" (~["*"])* "*)">
+| <COMMENT_BRACE: "{" (~["}"])* "}">
+}
+
+/* Symbols */
+
+TOKEN : {
+  <#LETTER: ["a"-"z", "A"-"Z"]>
+| <#DIGIT: ["0"-"9"]>
+| <#HEX_DIGIT: ["0"-"9", "A"-"F", "a"-"f"]> 
+| <#OCTAL_DIGIT: ["0"-"7"]>
+| <#BIN_DIGIT: ["0"-"1"]>
+| <UNDERSCORE: "_">
+| <#EXP: "E" | "e">
+}
+
+/* Symbols - Specials Characters */
+
+TOKEN : {
+  <SINGLE_QUOTE: "'">
+| <PLUS: "+">
+| <MINUS: "-">
+| <MULTIPLY: "*">
+| <DIVIDE: "/">
+| <EQUAL: "=">
+| <LESS_THAN: "<">
+| <GREATER_THAN: ">">
+| <LEFT_BRACKET: "[">
+| <RIGHT_BRACKET: "]">
+| <DOT: ".">
+| <COMMA: ",">
+| <LEFT_PAREN: "(">
+| <RIGHT_PAREN: ")">
+| <COLON: ":">
+| <CARET: "^">   
+| <AT: "@">
+| <LEFT_BRACE: "{">
+| <RIGHT_BRACE: "}">
+| <DOLLAR: "$">
+| <HASH: "#">
+| <AND_SYMBOL: "&"> 
+| <PERCENT: "%">
+| <DOUBLE_LESS_THAN: "<<">
+| <DOUBLE_GREATER_THAN: ">>">
+| <DOUBLE_ASTERISK: "**">
+| <ANGLE_BRACKETS: "<>">
+| <ANGLE_BRACKETS_REVERSED: "><">
+| <LESS_THAN_EQUAL: "<=">
+| <GREATER_THAN_EQUAL: ">=">
+| <ASSIGN: ":=">
+| <PLUS_ASSIGN: "+=">
+| <MINUS_ASSIGN: "-=">
+| <MULTIPLY_ASSIGN: "*=">
+| <DIVIDE_ASSIGN: "/=">
+| <LEFT_PAREN_DOT: "(.">
+| <DOT_RIGHT_PAREN: ".)">
+}
+
+/* Reserved Words - Turbo Pascal */
+
+TOKEN: {
+  <ABSOLUTE: "absolute">
+| <AND: "and">
+| <ARRAY: "array">
+| <ASM: "asm">
+| <BEGIN: "begin">
+| <CASE: "case">
+| <CONST: "const">
+| <CONSTRUCTOR: "constructor">
+| <DESTRUCTOR: "destructor">
+| <DIV: "div">
+| <DO: "do">
+| <DOWNTO: "downto">
+| <ELSE: "else">
+| <END: "end">
+| <FILE: "file">
+| <FOR: "for">
+| <FUNCTION: "function">
+| <IF: "if">
+| <IMPLEMENTATION: "implementation">
+| <IN: "in">
+| <INHERITED: "inherited">
+| <INLINE: "inline">
+| <INTERFACE: "interface">
+| <MOD: "mod">
+| <NIL: "nil">
+| <NOT: "not">
+| <OBJECT: "object">
+| <OF: "of">
+| <OPERATOR: "operator"> 
+| <OR: "or"> 
+| <PACKED: "packed"> 
+| <PROCEDURE: "procedure"> 
+| <PROGRAM: "program"> 
+| <RECORD: "record"> 
+| <REINTRODUCE: "reintroduce"> 
+| <REPEAT: "repeat"> 
+| <SELF: "self"> 
+| <SET: "set">
+| <SHL: "shl"> 
+| <SHR: "shr"> 
+| <STRING: "string"> 
+| <THEN: "then"> 
+| <TO: "to"> 
+| <TYPE: "type"> 
+| <UNIT: "unit"> 
+| <UNTIL: "until"> 
+| <USES: "uses"> 
+| <VAR: "var"> 
+| <WHILE: "while"> 
+| <WHIT: "whit"> 
+| <XOR: "xor"> 
+}
+
+/* Reserved Words - Object Pascal */
+
+TOKEN: {
+  <AS: "as">
+| <CLASS: "class">
+| <DISPINTERFACE: "dispinterface">
+| <EXCEPT: "except">
+| <EXPORTS: "exports">
+| <FINALIZATION: "finalization">
+| <FINALLY: "finally">
+| <INITIALIZATION: "initialization">
+| <IS: "is">
+| <LIBRARY: "library">
+| <ON: "on">
+| <OUT: "out">
+| <PROPERTY: "property">
+| <RAISE: "raise">
+| <RESOURCESTRING: "resourcestring">
+| <THREADVAR: "threadvar">
+| <TRY: "try"> 
+}
+
+/* Reserved Words - Modifiers */
+
+TOKEN: {
+  <ABSTRACT: "abstract">
+| <ALIAS: "alias">
+| <ASSEMBLER: "assembler">
+| <BITPACKED: "bitpacked">
+| <BREAK: "break">
+| <CDECL: "cdecl">
+| <CONTINUE: "continue">  
+| <CPPDECL: "cppdecl">  
+| <CVAR: "cvar">  
+| <DEFAULT_TOKEN: "default">  
+| <DEPRECATED: "deprecated">  
+| <DYNAMIC: "dynamic">
+| <ENUMERATOR: "enumerator">  
+| <EXPERIMENTAL: "experimental">  
+| <EXPORT: "export">  
+| <EXTERNAL: "external">
+| <FAR: "far">  
+| <FAR16: "far16">  
+| <FORWARD: "forward">  
+| <GENERIC: "generic">
+| <HELPER: "helper">
+| <IMPLEMENTS: "implements">
+| <INDEX: "index">  
+| <INTERRUPT: "interrupt">  
+| <IOCHECK: "iocheck">  
+| <LOCAL: "local">
+| <MESSAGE: "message">  
+| <NAME: "name">  
+| <NEAR: "near">  
+| <NODEFAULT: "nodefault">  
+| <NORETURN: "noreturn">  
+| <NOSTACKFRAME: "nostackframe">
+| <OLDFPCCALL: "oldfpccall">  
+| <OTHERWISE: "otherwise">
+| <OVERLOAD: "overload">  
+| <OVERRIDE: "override">  
+| <PASCAL: "pascal">
+| <PLATFORM: "platform">  
+| <PRIVATE: "private">  
+| <PROTECTED: "protected">  
+| <PUBLIC: "public">  
+| <PUBLISHED: "published">  
+| <READ: "read">  
+| <REGISTER: "register">  
+| <RESULT: "result">  
+| <SAFECALL: "safecall">  
+| <SAVEREGISTERS: "saveregisters">  
+| <SOFTFLOAT: "softfloat">  
+| <SPECIALIZE: "specialize">  
+| <STATIC: "static">  
+| <STDCALL: "stdcall">  
+| <STORED: "stored">
+| <STRICT: "strict">  
+| <UNALIGNED: "unaligned">  
+| <UNIMPLEMENTED: "unimplemented">  
+| <VARARGS: "varargs">  
+| <VIRTUAL: "virtual">  
+| <WINAPI: "winapi">  
+| <WRITE: "write"> 
+}
+
+/* Identifiers */
+
+TOKEN: {
+  <#IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
+}
+
+/* Numbers */
+
+TOKEN : {
+  <#HEX_DIGIT_SEQUENCE: (<SIGNAL>)? <DOLLAR> (<HEX_DIGIT>)+>
+| <#OCTAL_DIGIT_SEQUENCE: (<SIGNAL>)? <AND_SYMBOL> (<OCTAL_DIGIT>)+ >
+| <#BIN_DIGIT_SEQUENCE: (<SIGNAL>)? "%" (<BIN_DIGIT>)+ >
+| <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
+| <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+| <#SIGNAL: "+" | "-">
+| <#UNSIGNED_REAL: (<SIGNAL>)? (<DIGIT> (<DIGIT>)*)+ "." (<DIGIT> (<DIGIT>)*)* (<EXP> (<SIGNAL>)? (<DIGIT>)+)? >
+| <SCALE_FACTOR: <EXP> (<SIGNAL>)? (<DIGIT>)+ >
+| <#UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL> >
+| <SIGNED_NUMBER:  (<SIGNAL>)? <UNSIGNED_NUMBER>>
+}
+
+/* Character Strings */
+
+TOKEN: {
+  <CHARACTER_STRING: (<QUOTED_STRING> | <CONTROL_STRING>)+>
+| <#QUOTED_STRING: "'" ([" " - "&", "(" - "~"])* "'">
+| <STRING_CHARACTER: [" " - "&", "(" - "~"]>
+| <#CONTROL_STRING: "#" <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+}
