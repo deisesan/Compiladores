@@ -1,35 +1,41 @@
-## Enunciado - Laboratório 01
+## Enunciado - Laboratório 01 - Correção
 
-Escreva um programa de computador que faça análise léxica do texto de um programa de computador na linguagem sorteada para você. Nesta análise não é necessário tratar modo XML (Scala), nem validade de caractere Unicode (Go). 
+```c
 
-Seu programa deve identificar todos os lexemas/tokens/unidades léxicas da linguagem. Sugiro fortemente utilizar um gerador automático de parser léxico, tal como JavaCC, ou uma linguagem com suporte a expressões regulares, tal como Rub.
+/* Você deve criar um programa na sua linguagem de programação */
+/* sorteada que seja equivalente ao programa em C abaixo, utilizando */
+/* as mesmas estruturas léxicas. Em seguida, você deve executar */
+/* o seu parser léxico sobre este programa e gerar a saída tokenizada */
+/* dele. Em seguida, você deve apresentar esta execução ao docente */
+/* em aula de laboratório. */
 
-A saída do seu programa deve conter uma linha para cada lexema/token/unidade léxica encontrada. A primeira string até o primeiro espaço de cada linha deve ser uma palavra cujas letras estejam em MAIÚSCULO identificando a classe do token. Por exemplo, ID para identificador, NUM_DEC para número decimal. 
+#include<stdio.h>
 
-Você deve escolher os nomes para as classes de Tokens e explicar ao docente no momento da apresentação. Em seguida, deve vir um espaço seguido pela sequência de caracteres do arquivo de entrada que correspondem ao token correspondente a esta linha.
+typedef struct {
+   int x;
+   int y;
+} ponto_t;
 
-### Anotações
+double func(ponto_t v[], int n) {
+    if (n <= 0) {
+        return 1.0; 
+    } else if (n == 1) {
+        return 1.01 + v[0].x / 1.e2 + v[0].y / 0.1e-2;
+    }
 
-/* Symbols - Specials Characters */
+    double res = .25e-13;
 
-Comentário da Documentação: 
-"When used in a range specifier, the character pair (. is equivalent to the left square bracket [. Likewise, the character pair .) is equivalent to the right square bracket ]. When used for comment delimiters, the character pair (* is equivalent to the left brace { and the character pair *) is equivalent to the right brace }. These character pairs retain their normal meaning in string expressions."
+    for (int i = n-1; i >= 0 && v[i].x > 0; --i) {
+       double temp = v[i].y * v[i].x % 123;
 
-AND e AMPERSAND-> "&"
+       if (temp < 0.0) {
+          res -= res*2.e-2 +  func(v, n-1) * temp;
+         } else {
+          res += res*.3e3 +func(v, n-2) * temp;
+          printf("Estranho, ne?\n");
+       }
+    }
 
-/* Hint Directives */
-
-TOKEN : {
-  <DEPRECATED: "deprecated">
-| <EXPERIMENTAL: "experimental">
-| <PLATFORM: "platform">
-| <UNIMPLEMENTED: "unimplemented">
+    return res;
 }
-
-/* Labels */
-
-TOKEN: {
-  <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
-}
-
-/* Não entra agora na Análise Léxica */
+```
