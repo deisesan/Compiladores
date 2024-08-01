@@ -41,9 +41,13 @@ double func(ponto_t v[], int n) {
 ```
 
 /* Numbers */
+
 /* <#UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL>> */
+
 /* <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>> */
+
 /* <#UNSIGNED_REAL: (<DIGIT> (<DIGIT>)*)+ "." (<DIGIT> (<DIGIT>)*)* (<EXP> (<SIGNAL>)? (<DIGIT>)+)?> */
+
 /* <SIGNED_NUMBER:  (<SIGNAL>)? <UNSIGNED_NUMBER>> */
 
 ![Captura de tela de 2024-08-01 19-08-01](https://github.com/user-attachments/assets/122bbc3a-788a-43e4-97cc-b5081c605d27)
