@@ -40,7 +40,7 @@ double func(ponto_t v[], int n) {
 }
 ```
 
-/* Numbers */
+/* Numbers - Definições Removidas */
 
 /* <#UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL>> */
 
