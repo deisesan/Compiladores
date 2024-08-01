@@ -1,5 +1,5 @@
 /* 
-  Laboratório 01 - Correção
+  Laboratório 01
   Matéria: Compiladores
   Aluna: Deise Santana 
   Professor: Alberto Alexandre Assis Miranda
@@ -281,16 +281,14 @@ TOKEN: {
 /* Numbers */
 
 TOKEN : {
-  <#HEX_DIGIT_SEQUENCE: (<SIGNAL>)? <DOLLAR> (<HEX_DIGIT>)+>
-| <#OCTAL_DIGIT_SEQUENCE: (<SIGNAL>)? <AND_SYMBOL> (<OCTAL_DIGIT>)+ >
-| <#BIN_DIGIT_SEQUENCE: (<SIGNAL>)? "%" (<BIN_DIGIT>)+ >
-| <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)* >
-| <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+  <NUMBER_INTEGER: (<SIGNAL>)? <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE>>
+| <NUMBER_FLOAT: (<SIGNAL>)? (<DIGIT> (<DIGIT>)*)+ "." (<DIGIT> (<DIGIT>)*)* (<EXP> (<SIGNAL>)? (<DIGIT>)+)?>
+| <SCALE_FACTOR: <EXP> (<SIGNAL>)? (<DIGIT>)+>
+| <#HEX_DIGIT_SEQUENCE: (<SIGNAL>)? <DOLLAR> (<HEX_DIGIT>)+>
+| <#OCTAL_DIGIT_SEQUENCE: (<SIGNAL>)? <AND_SYMBOL> (<OCTAL_DIGIT>)+>
+| <#BIN_DIGIT_SEQUENCE: (<SIGNAL>)? "%" (<BIN_DIGIT>)+>
+| <#DIGIT_SEQUENCE: <DIGIT> (<DIGIT>)*>
 | <#SIGNAL: "+" | "-">
-| <#UNSIGNED_REAL: (<SIGNAL>)? (<DIGIT> (<DIGIT>)*)+ "." (<DIGIT> (<DIGIT>)*)* (<EXP> (<SIGNAL>)? (<DIGIT>)+)? >
-| <SCALE_FACTOR: <EXP> (<SIGNAL>)? (<DIGIT>)+ >
-| <#UNSIGNED_NUMBER:  <UNSIGNED_INTEGER> | <UNSIGNED_REAL> >
-| <SIGNED_NUMBER:  (<SIGNAL>)? <UNSIGNED_NUMBER>>
 }
 
 /* Character Strings */
