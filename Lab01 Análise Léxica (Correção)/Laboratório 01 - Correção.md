@@ -39,6 +39,7 @@ double func(ponto_t v[], int n) {
     return res;
 }
 ```
+### Anotações
 
 /* Numbers - Definições Removidas */
 
