@@ -17,7 +17,11 @@ compile:
 
 # Comando Run
 run:
-	java Parser codigo.pas
+	@if [ -z "$(file)" ]; then \
+        echo "Error: No input file specified. Usage: make all <filename>"; \
+        exit 1; \
+    fi
+	java Parser $(file)
 
 # Comando Clean
 clean:
