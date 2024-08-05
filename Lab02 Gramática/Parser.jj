@@ -90,17 +90,18 @@ TOKEN : {
 | <LEFT_BRACKET: "[">
 | <RIGHT_BRACKET: "]">
 | <DOT: ".">
+| <DOT_DOT: "..">
 | <COMMA: ",">
 | <LEFT_PAREN: "(">
 | <RIGHT_PAREN: ")">
 | <COLON: ":">
-| <SEMICOLON: ";">
 | <CARET: "^">   
 | <AT: "@">
 | <LEFT_BRACE: "{">
 | <RIGHT_BRACE: "}">
 | <DOLLAR: "$">
 | <HASH: "#">
+| <AMPERSAND: "&">
 | <PERCENT: "%">
 | <DOUBLE_LESS_THAN: "<<">
 | <DOUBLE_GREATER_THAN: ">>">
@@ -116,6 +117,7 @@ TOKEN : {
 | <DIVIDE_ASSIGN: "/=">
 | <LEFT_PAREN_DOT: "(.">
 | <DOT_RIGHT_PAREN: ".)">
+| <SEMICOLON: ";">
 }
 
 /* Reserved Words - Turbo Pascal */
@@ -144,6 +146,7 @@ TOKEN: {
 | <INHERITED: "inherited">
 | <INLINE: "inline">
 | <INTERFACE: "interface">
+| <LABEL: "label">
 | <MOD: "mod">
 | <NIL: "nil">
 | <NOT: "not">
@@ -268,36 +271,46 @@ TOKEN : {
 | <#HEX_DIGIT: ["0"-"9", "A"-"F", "a"-"f"]> 
 | <#OCTAL_DIGIT: ["0"-"7"]>
 | <#BIN_DIGIT: ["0"-"1"]>
-| <#EXP: "E" | "e">
-| <#SIGNAL: "+" | "-">
-| <AMPERSAND: "&">
 }
 
 /* Identifiers */
 
 TOKEN: {
-  <IDENTIFIER: (<AMPERSAND>)? <LETTER> (<LETTER> | <DIGIT>)* >
+  <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)* >
 }
 
-/* Hint Directives */
+/* Hint Directives
 
 TOKEN: {
 	<#DEPRECATED_IDENTIFIER: <DEPRECATED> (<IDENTIFIER>)?>
-| <HINT_DIRECTIVE: ( <DEPRECATED_IDENTIFIER> | <EXPERIMENTAL> | <PLATFORM> | <UNIMPLEMENTED>)+>
+| <HINT_DIRECTIVE: ( <DEPRECATED_IDENTIFIER> | <EXPERIMENTAL> | <PLATFORM> | <UNIMPLEMENTED>)*>
 }
+*/
 
 /* Numbers */
 
 TOKEN : {
-  <#DIGIT_SEQUENCE: (<DIGIT>)+>
-| <HEX_DIGIT_SEQUENCE: "$" (<HEX_DIGIT>)+>
-| <OCTAL_DIGIT_SEQUENCE: "&" (<OCTAL_DIGIT>)+>
-| <BIN_DIGIT_SEQUENCE: "%" (<BIN_DIGIT>)+>
-| <DECIMAL_DIGIT_SEQUENCE: (<DIGIT_SEQUENCE>)+>
-| <#SCALE_FACTOR: ("E" | "e") (<SIGNAL>)? (<DIGIT_SEQUENCE>)+>
-| <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | <HEX_DIGIT_SEQUENCE> | <OCTAL_DIGIT_SEQUENCE> | <BIN_DIGIT_SEQUENCE> | <DECIMAL_DIGIT_SEQUENCE>>
-| <NUMBER_REAL: (<SIGNAL>)? (<DIGIT_SEQUENCE>)+ "." (<DIGIT_SEQUENCE>)* (<SCALE_FACTOR>)?>
+  <HEX_DIGIT_SEQUENCE: (<HEX_DIGIT>)+>
+| <OCTAL_DIGIT_SEQUENCE: (<OCTAL_DIGIT>)+>
+| <BIN_DIGIT_SEQUENCE: (<BIN_DIGIT>)+>
+| <DIGIT_SEQUENCE: (<DIGIT>)+>
+| <#UNSIGNED_INTEGER: <DIGIT_SEQUENCE> | ("$" <HEX_DIGIT_SEQUENCE>) | ("&" <OCTAL_DIGIT_SEQUENCE>) | ("%" <BIN_DIGIT_SEQUENCE>)>
+| <#SIGNAL: "+" | "-">
+| <#EXP: "E" | "e">
+| <#SCALE_FACTOR: <EXP> (<SIGNAL>)? <DIGIT_SEQUENCE>>
+| <#UNSIGNED_REAL: <DIGIT_SEQUENCE> ("." <DIGIT_SEQUENCE>)? (<SCALE_FACTOR>)?>
+| <UNSIGNED_NUMBER: <UNSIGNED_REAL> | <UNSIGNED_INTEGER>>
+| <#SIGNED_NUMBER: (<SIGNAL>)? <UNSIGNED_NUMBER>>
+| <NUMBER_REAL: (<SIGNAL>)? <DIGIT_SEQUENCE> ("." <DIGIT_SEQUENCE>)? (<SCALE_FACTOR>)?>
 }
+
+/* Label
+
+TOKEN: {
+  <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
+}
+*/
+
 
 /* Character Strings */
 
