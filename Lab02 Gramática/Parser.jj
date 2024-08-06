@@ -146,8 +146,8 @@ TOKEN: {
 | <INHERITED: "inherited">
 | <INLINE: "inline">
 | <INTERFACE: "interface">
-| <LABEL: "label">
 | <MOD: "mod">
+| <NESTED: "nested">
 | <NIL: "nil">
 | <NOT: "not">
 | <OBJECT: "object">
@@ -304,13 +304,11 @@ TOKEN : {
 | <NUMBER_REAL: (<SIGNAL>)? <DIGIT_SEQUENCE> ("." <DIGIT_SEQUENCE>)? (<SCALE_FACTOR>)?>
 }
 
-/* Label
+/* Label */
 
 TOKEN: {
   <LABEL: <DIGIT_SEQUENCE> | <IDENTIFIER>>
 }
-*/
-
 
 /* Character Strings */
 
